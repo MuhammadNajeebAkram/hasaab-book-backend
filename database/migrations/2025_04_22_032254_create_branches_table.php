@@ -20,6 +20,9 @@ return new class extends Migration
             $table->unsignedBigInteger('salary_account');
             $table->unsignedBigInteger('salary_advance_account');
             $table->unsignedBigInteger('employee_loan_account');
+            $table->unsignedBigInteger('bonus_account');
+            $table->unsignedBigInteger('overtime_account');
+            $table->unsignedBigInteger('other_allowance_account');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->boolean('is_active')->default(true);
@@ -30,6 +33,9 @@ return new class extends Migration
             $table->foreign('salary_account')->references('id')->on('chart_of_accounts')->onDelete('no action');
             $table->foreign('salary_advance_account')->references('id')->on('chart_of_accounts')->onDelete('no action');
             $table->foreign('employee_loan_account')->references('id')->on('chart_of_accounts')->onDelete('no action');
+            $table->foreign('bonus_account')->references('id')->on('chart_of_accounts')->onDelete('no action');
+            $table->foreign('overtime_account')->references('id')->on('chart_of_accounts')->onDelete('no action');
+            $table->foreign('other_allowance_account')->references('id')->on('chart_of_accounts')->onDelete('no action');
             $table->foreign('city_id')->references('id')->on('cities')->onDelete('no action');
 
 

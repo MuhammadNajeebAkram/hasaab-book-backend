@@ -20,7 +20,8 @@ return new class extends Migration
     $table->integer('installments'); // total number of monthly installments
     $table->decimal('installment_amount', 15, 2);    
     $table->date('issue_date');
-    $table->date('repayment_start_date')->nullable();
+    $table->integer('repayment_start_year')->nullable();
+    $table->integer('repayment_start_month')->nullable();
     $table->text('reason')->nullable();
     $table->enum('status', ['active', 'settled', 'defaulted'])->default('active');
     $table->timestamps();

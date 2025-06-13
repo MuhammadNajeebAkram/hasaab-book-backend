@@ -28,6 +28,7 @@ return new class extends Migration
     $table->unsignedTinyInteger('level')->default(1);
     $table->text('description')->nullable();
     $table->unsignedBigInteger('created_by')->nullable();
+    $table->string('system_account_name')->nullable();
 $table->unsignedBigInteger('updated_by')->nullable();
     $table->timestamps();
     $table->softDeletes();
