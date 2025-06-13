@@ -19,6 +19,8 @@ class Salary extends Model
         'medical_allowance',
         'travel_allowance',
         'overtime',
+        'overtime_hours',
+        'dot_x',
         'other_allowance',
         'advance_deduction',
         'loan_deduction',        

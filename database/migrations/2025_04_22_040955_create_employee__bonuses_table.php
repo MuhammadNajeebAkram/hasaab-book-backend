@@ -11,15 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee_bonus', function (Blueprint $table) {
+        Schema::create('employee_bonuses', function (Blueprint $table) {
             $table->id();
-    $table->foreignId('employee_id')->constrained()->onDelete('cascade');
-    $table->foreignId('voucher_id')->constrained()->onDelete('cascade');
-    $table->decimal('amount', 15, 2);
-    $table->string('type')->nullable(); // e.g., 'performance', 'eid', 'year-end'
+            $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
+            $table->foreignId('voucher_id')->constrained('vouchers')->onDelete('cascade');
+            $table->foreignId('account_id')->constrained('chart_of_accounts','id')->onDelete('cascade');
+    $table->foreignId('bonus_id')->constrained('bonuses', 'id')->onDelete(('cascade'));
+    $table->decimal('amount', 15, 2);   
     $table->string('description')->nullable();
     
     $table->date('bonus_date'); // when it's awarded
+    $table->enum('status', ['pending', 'paid'])->default('pending');
     
     
     $table->timestamps();
@@ -31,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employee_bonus');
+        Schema::dropIfExists('employee_bonuses');
     }
 };

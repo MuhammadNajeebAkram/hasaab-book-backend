@@ -124,7 +124,7 @@ class EmployeeController extends Controller
     public function getEmployeesWithSalaryAccounts(){
         try{
             $employees = Employee::
-            with('branch:id,salary_account,salary_advance_account,employee_loan_account')
+            with('branch:id,salary_account,salary_advance_account,employee_loan_account,overtime_account,other_allowance_account,bonus_account')
             ->get()
             ->map(function ($entry) {
                 return [
@@ -133,6 +133,9 @@ class EmployeeController extends Controller
                     'salary_account' => $entry->branch->salary_account,
                     'salary_advance_account' => $entry->branch->salary_advance_account,
                     'employee_loan_account' => $entry->branch->employee_loan_account,
+                    'overtime_account' => $entry->branch->overtime_account,
+                    'other_allowance_account' => $entry->branch->other_allowance_account,
+                    'bonus_account' => $entry->branch->bonus_account,
                 ];
             });
 

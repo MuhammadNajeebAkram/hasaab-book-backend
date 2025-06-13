@@ -89,7 +89,7 @@ class VoucherController extends Controller
         $validated['voucher_no'] = $voucher_no;
        
 
-        $Voucher = Voucher::create($validated);
+        $Voucher = Voucher::create($validated); 
 
        
             foreach($request->entries as $Entry){
@@ -132,7 +132,7 @@ public function updateDraftVoucher(Request $request)
             'type' => 'required|string',
             'payment_mode' => 'required|in:cash,bank,journal',
             'payment_account' => 'nullable|exists:chart_of_accounts,id',
-            //'voucher_date' => 'nullable|date',
+            'voucher_date' => 'nullable|date',
             'description' => 'nullable|string',
             'transaction_no' => 'nullable|string',
             'entries' => 'required|array',
@@ -227,6 +227,9 @@ public function updateDraftVoucher(Request $request)
             break;
         case 'employee loan':
             $prefix = 'ELV-';
+            break;
+        case 'employee bonus':
+            $prefix = 'EBV-';
             break;
         default:
             $prefix = 'VC-'; // Generic Voucher

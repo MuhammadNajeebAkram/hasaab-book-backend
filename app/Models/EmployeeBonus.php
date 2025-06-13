@@ -12,10 +12,12 @@ class EmployeeBonus extends Model
     protected $fillable = [
         'employee_id',
         'voucher_id',
-        'amount',
-        'type',
+        'account_id',
+        'bonus_id',
+        'amount',        
         'description',
         'bonus_date',
+        'status',
     ];
 
     public function employee()
@@ -26,6 +28,16 @@ class EmployeeBonus extends Model
     public function voucher()
     {
         return $this->belongsTo(Voucher::class);
+    }
+
+    public function account()
+    {
+        return $this->belongsTo(ChartOfAccount::class);
+    }
+
+    public function bonus()
+    {
+        return $this->belongsTo(Bonus::class);
     }
     
 

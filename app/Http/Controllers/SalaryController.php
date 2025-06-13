@@ -32,6 +32,8 @@ class SalaryController extends Controller
                     'travel_allowance' => 'nullable|numeric',
                     'other_allowance' => 'nullable|numeric',
                     'overtime' => 'nullable|numeric',
+                    'overtime_hours' => 'nullable|numeric',
+                    'dot_x' => 'nullable|numeric',
                     'advance_deduction' => 'nullable|numeric',
                     'loan_deduction' => 'nullable|numeric',
                     'gross_salary' => 'required|numeric',
@@ -41,6 +43,9 @@ class SalaryController extends Controller
                     'account_id' => 'required|numeric|exists:chart_of_accounts,id',             // salary account
                     'advance_account' => 'required|numeric|exists:chart_of_accounts,id',
                     'loan_account' => 'required|numeric|exists:chart_of_accounts,id',
+                    'overtime_account' => 'required|numeric|exists:chart_of_accounts,id',
+                    'other_allowance_account' => 'required|numeric|exists:chart_of_accounts,id',
+                    
                 ]);
 
                 $exists = Salary::where('employee_id', $validated['employee_id'])
@@ -70,6 +75,14 @@ class SalaryController extends Controller
                     $entries[] = ['account_id' => $validated['loan_account'], 'amount' => $validated['loan_deduction'], 'description' => $validated['description'], 'type' => 'credit'];
                 }
 
+                if($validated['overtime'] > 0){
+                    $entries[] = ['account_id' => $validated['overtime_account'], 'amount' => $validated['overtime'], 'description' => $validated['description'], 'type' => 'debit'];
+                }
+
+                if($validated['other_allowance'] > 0){
+                    $entries[] = ['account_id' => $validated['other_allowance_account'], 'amount' => $validated['other_allowance'], 'description' => $validated['description'], 'type' => 'debit'];
+                }
+
                 $request['entries'] = $entries;
     
                 //$validated['payment_date'] = $validated['voucher_date'];
@@ -92,6 +105,7 @@ class SalaryController extends Controller
                 return response()->json([
                     'success' => 1,
                     'message' => 'Salary Voucher saved successfully',
+                    'entries' => $entries,
                    
                     
                 ], 200);
@@ -112,27 +126,31 @@ class SalaryController extends Controller
             $validated = $request->validate([
                 'id' => 'required|exists:vouchers,id',
                 'type' => 'required|string',
-                'payment_mode' => 'required|in:cash,bank,journal',
-                'payment_account' => 'required|exists:chart_of_accounts,id',
-                //'voucher_date' => 'nullable|date',
-                'description' => 'nullable|string',
-                'transaction_no' => 'nullable|string',
-                'employee_id' => 'required|numeric|exists:employees,id',
-                'basic_salary' => 'required|numeric',
-                'house_rent' => 'nullable|numeric',
-                'medical_allowance' => 'nullable|numeric',
-                'travel_allowance' => 'nullable|numeric',
-                'other_allowance' => 'nullable|numeric',
-                'overtime' => 'nullable|numeric',
-                'advance_deduction' => 'nullable|numeric',
-                'loan_deduction' => 'nullable|numeric',
-                'gross_salary' => 'required|numeric',
-                'net_salary' => 'required|numeric',
-                'year' => 'required|numeric',
-                'month' => 'required|numeric',
-                'account_id' => 'required|numeric|exists:chart_of_accounts,id',             // salary account
-                'advance_account' => 'required|numeric|exists:chart_of_accounts,id',
-                'loan_account' => 'required|numeric|exists:chart_of_accounts,id',
+                    'payment_mode' => 'required|in:cash,bank,journal',
+                    'payment_account' => 'required|exists:chart_of_accounts,id',
+                    'voucher_date' => 'nullable|date',
+                    'description' => 'nullable|string',
+                    'transaction_no' => 'nullable|string',
+                    'employee_id' => 'required|numeric|exists:employees,id',
+                    'basic_salary' => 'required|numeric',
+                    'house_rent' => 'nullable|numeric',
+                    'medical_allowance' => 'nullable|numeric',
+                    'travel_allowance' => 'nullable|numeric',
+                    'other_allowance' => 'nullable|numeric',
+                    'overtime' => 'nullable|numeric',
+                    'overtime_hours' => 'nullable|numeric',
+                    'dot_x' => 'nullable|numeric',
+                    'advance_deduction' => 'nullable|numeric',
+                    'loan_deduction' => 'nullable|numeric',
+                    'gross_salary' => 'required|numeric',
+                    'net_salary' => 'required|numeric',
+                    'year' => 'required|numeric',
+                    'month' => 'required|numeric',
+                    'account_id' => 'required|numeric|exists:chart_of_accounts,id',             // salary account
+                    'advance_account' => 'required|numeric|exists:chart_of_accounts,id',
+                    'loan_account' => 'required|numeric|exists:chart_of_accounts,id',
+                    'overtime_account' => 'required|numeric|exists:chart_of_accounts,id',
+                    'other_allowance_account' => 'required|numeric|exists:chart_of_accounts,id',
             ]);
 
             $entries = [
@@ -147,6 +165,14 @@ class SalaryController extends Controller
 
             if($validated['loan_deduction'] > 0){
                 $entries[] = ['account_id' => $validated['loan_account'], 'amount' => $validated['loan_deduction'], 'description' => $validated['description'], 'type' => 'credit'];
+            }
+
+            if($validated['overtime'] > 0){
+                $entries[] = ['account_id' => $validated['overtime_account'], 'amount' => $validated['overtime'], 'description' => $validated['description'], 'type' => 'debit'];
+            }
+
+            if($validated['other_allowance'] > 0){
+                $entries[] = ['account_id' => $validated['other_allowance_account'], 'amount' => $validated['other_allowance'], 'description' => $validated['description'], 'type' => 'debit'];
             }
 
             $request['entries'] = $entries;
@@ -216,6 +242,8 @@ class SalaryController extends Controller
             return response()->json([
                 'success' => 1,
                 'message' => 'Salary Voucher updated successfully',
+                'resData' => $responseData,
+                'entries' => $entries,
             ], 200);
             
 

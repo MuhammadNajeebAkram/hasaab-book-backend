@@ -5,11 +5,13 @@ use App\Http\Controllers\AdvanceSalaryEntryController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BonusController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\COAController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\DivisionController;
+use App\Http\Controllers\EmployeeBonusController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeDesignationController;
 use App\Http\Controllers\EmployeeLoanController;
@@ -33,6 +35,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/get_all_coa_by_parent/{parent}', [COAController::class, 'getAllCOAByParent']);
     Route::get('/get_all_coa_cash_or_bank/{is_cash}/{is_bank}', [COAController::class, 'getCashOrBankAccount']);
     Route::get('/get_salaries_accounts/{is_salary}/{is_advance}/{is_loan}', [COAController::class, 'getSalariesAccounts']);
+    Route::get('get_child_of_system_coa/{id}', [COAController::class, 'getChildOfSystemCOA']);
    
 
     Route::post('save_draft_voucher', [VoucherController::class, 'saveDraftVoucher']);
@@ -85,6 +88,11 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('save_salary', [SalaryController::class, 'saveSalary']);
     Route::post('update_salary', [SalaryController::class, 'updateSalary']);
     Route::get('get_employee_salary_by_voucher/{id}', [SalaryController::class, 'getSalaryByVoucher']);
+
+    Route::get('get_bonuses', [BonusController::class, 'getBonuses']);
+    Route::post('save_employee_bonus', [EmployeeBonusController::class, 'saveEmployeeBonus']);
+    Route::post('update_employee_bonus', [EmployeeBonusController::class, 'updateEmployeeBonus']);
+    Route::get('get_bonus_entry_by_voucher/{id}', [EmployeeBonusController::class, 'getBonusByVoucher']);
 
 
 

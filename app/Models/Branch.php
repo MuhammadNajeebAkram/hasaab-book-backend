@@ -19,6 +19,9 @@ class Branch extends Model
         'salary_account',
         'salary_advance_account',
         'employee_loan_account',
+        'bonus_account',
+        'overtime_account',
+        'other_allowance_account',
         'is_active',
     ];
 

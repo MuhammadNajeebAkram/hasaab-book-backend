@@ -25,6 +25,8 @@ return new class extends Migration
     $table->decimal('medical_allowance', 15, 2)->default(0);
     $table->decimal('travel_allowance', 15, 2)->default(0);
     $table->decimal('overtime', 15, 2)->default(0);
+    $table->decimal('overtime_hours', 5, 2)->default(0);
+    $table->decimal('dot_x', 5, 2)->default(0);
     $table->decimal('other_allowance', 15, 2)->default(0);
 
     $table->decimal('advance_deduction', 15, 2)->default(0);   // From advance_salaries

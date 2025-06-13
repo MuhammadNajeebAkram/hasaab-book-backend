@@ -261,6 +261,63 @@ try{
     ], 500);
 }
 }
+
+public function getChildOfSystemCOA($account_name){
+    try{
+        $id = ChartOfAccount::where('system_account_name', $account_name)
+        ->value('id');
+        
+
+        $accounts = ChartOfAccount::where('parent_id', $id)
+        ->select('id', 'account_name', 'normal_balance', 'opening_balance')
+        ->get();
+
+        if($accounts->isEmpty()){
+            return response()->json([
+                'success' => 0,
+                'message' => "No accounts found for Cash.",
+                'data' => []
+            ], 404);
+        }
+     
+        foreach ($accounts as $account) {
+            // Fetch total debit and credit based on 'type' column
+            $balanceData = DB::table('account_registers')
+                ->selectRaw("
+                    SUM(CASE WHEN type = 'debit' THEN amount ELSE 0 END) as total_debit,
+                    SUM(CASE WHEN type = 'credit' THEN amount ELSE 0 END) as total_credit
+                ")
+                ->where('account_id', $account->id)
+                ->first();
+
+            $totalDebit = $balanceData->total_debit ?? 0;
+            $totalCredit = $balanceData->total_credit ?? 0;
+
+            // Compute based on normal balance
+            if (strtolower($account->normal_balance) === 'debit') {
+                $balance = $account->opening_balance + ($totalDebit - $totalCredit);
+            } else {
+                $balance = $account->opening_balance + ($totalCredit - $totalDebit);
+            }
+
+            $account->balance = $balance;
+        }
+
+// Return response
+return response()->json([
+'success' => 1,
+'message' => "Cash Accounts retrieved successfully.",
+'data' => $accounts,
+]);
+
+    }catch(\Exception $e){
+    return response()->json([
+        'success' => -1,
+        'message' => $e->getMessage()
+    ], 500);
+}
+}
+
 public function updateCOA(Request $request)
 {
     try {
@@ -333,7 +390,7 @@ public function activateAccount($id, $status){
     }
 }
 
-    private function generateCOA_Code($parent_id, $level)
+    public function generateCOA_Code($parent_id, $level)
 {
     $parent = ChartOfAccount::where('id', $parent_id)->select('code')->first();
 
