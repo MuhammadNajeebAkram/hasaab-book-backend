@@ -23,7 +23,7 @@ return new class extends Migration
     $table->integer('repayment_start_year')->nullable();
     $table->integer('repayment_start_month')->nullable();
     $table->text('reason')->nullable();
-    $table->enum('status', ['active', 'settled', 'defaulted'])->default('active');
+    $table->enum('status', ['in process', 'active', 'settled', 'defaulted'])->default('active');
     $table->timestamps();
         });
     }

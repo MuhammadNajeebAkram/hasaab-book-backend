@@ -38,6 +38,7 @@ class EmployeeLoanController extends Controller
 
             $Voucher = $responseData->voucher;
             $validated['voucher_id'] = $Voucher->id;
+            $validated['status'] = 'in process';
 
             EmployeeLoan::create($validated);
 
@@ -94,6 +95,7 @@ class EmployeeLoanController extends Controller
                 $validated['employee_loan_id'] = $loan->id;
                 $validated['voucher_id'] = $validated['id'];
                 $validated['payment_type'] = 'issued';
+                $validated['status'] = 'active';
 
                 EmployeeLoanEntry::create($validated);
 
@@ -127,7 +129,7 @@ class EmployeeLoanController extends Controller
             $data = EmployeeLoan::where('voucher_id', $voucher_id)
             ->first();
 
-            return response()->json([
+            return response()->json([ 
                 'success' => 1,
                 'message' => 'Emploee Loan retreived successfully',
                'data' => $data,
