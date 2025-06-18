@@ -13,7 +13,7 @@ class Employee extends Model
     protected $fillable = [
         'name', 'cnic', 'email', 'address', 'city_id', 'contact_no', 'designation_id', 'branch_id',
         'joining_date', 'salary', 'house_rent', 'travel_allownce', 'medical_allownce',
-        'gender', 'dob', 'emergency_contact', 'photo'
+        'gender', 'dob', 'emergency_contact', 'photo', 'has_overtime'
     ];
 
     protected static function boot()

@@ -27,6 +27,7 @@ class EmployeeController extends Controller
                 'house_rent' => 'nullable|numeric',
                 'travel_allowance' => 'nullable|numeric',
                 'medical_allowance' => 'nullable|numeric',
+                'has_overtime'=> 'required|boolean',
 
             ]);
 
@@ -73,6 +74,7 @@ class EmployeeController extends Controller
                 'house_rent' => 'nullable|numeric',
                 'travel_allowance' => 'nullable|numeric',
                 'medical_allowance' => 'nullable|numeric',
+                'has_overtime'=> 'required|boolean',
 
             ]);
 
@@ -159,7 +161,7 @@ class EmployeeController extends Controller
     public function getEmployeeSalaryInfo($employee_id){
         try{
             $employees = Employee::where('id', $employee_id)
-            ->select('salary', 'house_rent', 'medical_allowance', 'travel_allowance')
+            ->select('salary', 'house_rent', 'medical_allowance', 'travel_allowance', 'has_overtime')
             ->get()->first();
 
             return response()->json([
