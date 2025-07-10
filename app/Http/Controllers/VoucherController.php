@@ -231,6 +231,10 @@ public function updateDraftVoucher(Request $request)
         case 'employee bonus':
             $prefix = 'EBV-';
             break;
+        case 'royalty voucher':
+            $prefix = 'RYV-';
+            break;
+        
         default:
             $prefix = 'VC-'; // Generic Voucher
             break;

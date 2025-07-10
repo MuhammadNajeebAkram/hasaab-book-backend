@@ -268,14 +268,14 @@ public function getChildOfSystemCOA($account_name){
         ->value('id');
         
 
-        $accounts = ChartOfAccount::where('parent_id', $id)
+        $accounts = ChartOfAccount::where('parent_id', '=', $id)
         ->select('id', 'account_name', 'normal_balance', 'opening_balance')
         ->get();
 
         if($accounts->isEmpty()){
             return response()->json([
                 'success' => 0,
-                'message' => "No accounts found for Cash.",
+                'message' => "No accounts found.",
                 'data' => []
             ], 404);
         }
@@ -306,8 +306,9 @@ public function getChildOfSystemCOA($account_name){
 // Return response
 return response()->json([
 'success' => 1,
-'message' => "Cash Accounts retrieved successfully.",
+'message' => "Accounts retrieved successfully.",
 'data' => $accounts,
+
 ]);
 
     }catch(\Exception $e){

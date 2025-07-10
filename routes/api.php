@@ -16,8 +16,12 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeDesignationController;
 use App\Http\Controllers\EmployeeLoanController;
 use App\Http\Controllers\EmployeeLoanEntryController;
+use App\Http\Controllers\InstituteController;
+use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ProvinceController;
+use App\Http\Controllers\RoyaltyPaymentController;
 use App\Http\Controllers\SalaryController;
+use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\VoucherController;
 use App\Models\AdvanceSalaryEntry;
 
@@ -93,6 +97,25 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('save_employee_bonus', [EmployeeBonusController::class, 'saveEmployeeBonus']);
     Route::post('update_employee_bonus', [EmployeeBonusController::class, 'updateEmployeeBonus']);
     Route::get('get_bonus_entry_by_voucher/{id}', [EmployeeBonusController::class, 'getBonusByVoucher']);
+
+    Route::post('save_subject', [SubjectController::class, 'saveSubject']);
+    Route::post('update_subject', [SubjectController::class, 'updateSubject']);
+    Route::get('get_subjects', [SubjectController::class, 'getSubjects']);
+    Route::get('get_status_subjects/{id}', [SubjectController::class, 'getStatusSubjects']);
+
+    Route::post('save_institute', [InstituteController::class, 'saveInstitute']);
+    Route::post('update_institute', [InstituteController::class, 'updateInstitute']);
+    Route::get('get_institutes/{id}', [InstituteController::class, 'getInstitutes']);
+
+    Route::post('save_professor', [ProfessorController::class, 'saveProfessor']);
+    Route::post('update_professor', [ProfessorController::class, 'updateProfessor']);
+    Route::get('get_search_professors/{column}/{keyword}', [ProfessorController::class, 'getProfessors']);
+    Route::get('get_status_authors/{id}', [ProfessorController::class, 'getStatusAuthors']);
+
+    Route::post('save_royalty_payment', [RoyaltyPaymentController::class, 'saveRoyaltyPayment']);
+    Route::post('update_royalty_payment', [RoyaltyPaymentController::class, 'updateRoyaltyPayment']);
+    Route::get('get_royalty_payment/{id}', [RoyaltyPaymentController::class, 'getRoyaltyPaymentByVoucher']);
+
 
 
 
