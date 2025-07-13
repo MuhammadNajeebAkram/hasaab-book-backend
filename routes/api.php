@@ -19,6 +19,7 @@ use App\Http\Controllers\EmployeeLoanEntryController;
 use App\Http\Controllers\InstituteController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ProvinceController;
+use App\Http\Controllers\Reports\FinancialReportController;
 use App\Http\Controllers\RoyaltyPaymentController;
 use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\SubjectController;
@@ -115,6 +116,10 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('save_royalty_payment', [RoyaltyPaymentController::class, 'saveRoyaltyPayment']);
     Route::post('update_royalty_payment', [RoyaltyPaymentController::class, 'updateRoyaltyPayment']);
     Route::get('get_royalty_payment/{id}', [RoyaltyPaymentController::class, 'getRoyaltyPaymentByVoucher']);
+
+
+    //Reports
+    Route::get('get_ledger/{accountId}', [FinancialReportController::class, 'getLedgerReport']);
 
 
 
