@@ -120,6 +120,7 @@ Route::middleware(['auth:api'])->group(function () {
 
     //Reports
     Route::get('get_ledger/{accountId}', [FinancialReportController::class, 'getLedgerReport']);
+    Route::get('get_daily_report/{accountId}', [FinancialReportController::class, 'getDailyReport']);
 
 
 

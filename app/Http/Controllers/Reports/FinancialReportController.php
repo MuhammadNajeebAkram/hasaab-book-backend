@@ -59,4 +59,52 @@ class FinancialReportController extends Controller
              ], 500);
          }
     }
+
+    public function getDailyReport(Request $request, int $accountId){
+        // Get the start and end dates from the request.
+        $_Date = $request->input('_date');
+        
+        
+        // You might want to add input validation here
+        if (empty($_Date)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Date is required.'
+            ], 400);
+        }
+
+        try {
+            $statement = DB::getPDO()->prepare("CALL GetDailyCashReport(?, ?)");
+            $statement->execute([$accountId, $_Date]);
+        
+        // Fetch the first result set (Summary)
+        $summary = $statement->fetchAll(DB::getPDO()::FETCH_ASSOC);
+
+        // Advance to the next result set (Transactions)
+        $statement->nextRowset();
+        $transactions = $statement->fetchAll(DB::getPDO()::FETCH_ASSOC);
+
+        // Close the statement
+        $statement->closeCursor();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Account ledger retrieved successfully.',
+                'data' => ['summary' => $summary[0], 'transactions' => $transactions],
+            ]);
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Catch database-specific errors (e.g., the SIGNAL you have in the procedure)
+            return response()->json([
+                'success' => false,
+                'message' => 'Database error: ' . $e->getMessage()
+            ], 500);
+        } catch (\Exception $e) {
+            // Catch other general errors
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred: ' . $e->getMessage()
+            ], 500);
+        }
+   }
 }
