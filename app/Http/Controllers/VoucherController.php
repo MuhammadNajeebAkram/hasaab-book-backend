@@ -83,10 +83,12 @@ class VoucherController extends Controller
             'transaction_no' => 'nullable|string',
             'payment_account' => 'nullable|exists:chart_of_accounts,id',
             
+            
         ]);
         $voucher_no = $this->generateVoucher($validated['type']);
 
         $validated['voucher_no'] = $voucher_no;
+       
        
 
         $Voucher = Voucher::create($validated); 

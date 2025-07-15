@@ -91,13 +91,16 @@ class EmployeeLoanController extends Controller
             $loan->update($validated);
 
             if($request->is_posted){
+                $validated['status'] = 'active';
+                $loan->update($validated);
 
                 $validated['employee_loan_id'] = $loan->id;
                 $validated['voucher_id'] = $validated['id'];
                 $validated['payment_type'] = 'issued';
-                $validated['status'] = 'active';
+                
 
                 EmployeeLoanEntry::create($validated);
+                
 
             }
            
