@@ -109,7 +109,7 @@ public function updateRoyaltyPayment(Request $request){
        
         if ($request->is_posted) {
             $validated['status'] = 'paid';
-            $validated['payment_date'] = $validated['voucher_date'];       
+            $validated['payment_date'] = Carbon::parse($validated['voucher_date']);       
            
             
         }

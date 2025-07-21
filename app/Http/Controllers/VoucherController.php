@@ -17,17 +17,21 @@ class VoucherController extends Controller
 
     public function getPostableVouchers($type){
         try{
-            $vouchers = Voucher::where('is_posted', 0)
+
+            
+           /* $vouchers = Voucher::where('is_posted', 0)
             ->where('type', $type)
-            ->get();
+            ->get();*/
+
+            $vouchers = DB::select("CALL getPostableVouchers(?)", [$type]);
            
-            if ($vouchers->isEmpty()) {
+           /* if ($vouchers->isEmpty()) {
                 return response()->json([
                     'success' => 0,
                     'message' => "No vouchers found for posting.",
                     'data' => [],                   
                 ], 404);
-            }
+            }*/
             
             return response()->json([
                 'success' => 1,
