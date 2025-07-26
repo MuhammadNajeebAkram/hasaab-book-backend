@@ -184,7 +184,7 @@ class SalaryController extends Controller
            // $mess = $responseData->message;
             
             $Voucher = $responseData->voucher;
-            $validated['voucher_id'] = $Voucher->id;
+            $validated['voucher_id'] = $Voucher->id; 
            
             if ($request->is_posted) {
                 $validated['status'] = 'paid';
@@ -234,6 +234,11 @@ class SalaryController extends Controller
 
             }
                 
+            }
+            else{
+                $salary = Salary::where('voucher_id', $validated['voucher_id'])->firstOrFail();
+                $salary->update($validated);
+
             }
             
 
