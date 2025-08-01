@@ -192,45 +192,78 @@ class SalaryController extends Controller
             
                 $salary = Salary::where('voucher_id', $validated['voucher_id'])->firstOrFail();
                 $salary->update($validated);
-            if($validated['loan_deduction'] > 0){
-
-                $empLoan = EmployeeLoan::where('employee_id', $validated['employee_id'])
-                ->where('status', 'active')
-                ->first();
-        
-            if ($empLoan) {
-                $loanEntries = [
-                    'employee_loan_id' => $empLoan->id,
-                    'voucher_id' => $validated['voucher_id'],
-                    'payment_type' => 'recovered',
-                    'amount' => $validated['loan_deduction'],
-                ];
-        
-                EmployeeLoanEntry::create($loanEntries);
-        
-                // Update loan status if fully recovered
-                (new EmployeeLoanController())->updateLoanStatus($validated['employee_id']);
-            }
-
-            }
+                if ($validated['loan_deduction'] > 0) {
+                    $empLoans = EmployeeLoan::where('employee_id', $validated['employee_id'])
+                        ->where('status', 'active')
+                        ->get();
+    
+                    $remainingDeductionAmount = $validated['loan_deduction']; // Track the amount still to be deducted
+    
+                    foreach ($empLoans as $empLoan) {
+                        if ($remainingDeductionAmount <= 0) {
+                            break; // No more deduction needed, exit loop
+                        }
+    
+                        $balance = EmployeeLoanEntry::where('employee_loan_id', $empLoan->id)
+                            ->selectRaw("
+                                SUM(CASE WHEN payment_type = 'issued' THEN amount ELSE 0 END) AS total_issued,
+                                SUM(CASE WHEN payment_type = 'recovered' THEN amount ELSE 0 END) AS total_recovered
+                            ")
+                            ->first();
+    
+                        // Corrected typo: total_recovered
+                        $loanBalance = $balance->total_issued - $balance->total_recovered;
+    
+                        if ($loanBalance <= 0) {
+                            // This loan is already settled or has no balance, skip it
+                            continue;
+                        }
+    
+                        // Determine the amount to recover from the current loan
+                        $amountToRecoverFromCurrentLoan = min($remainingDeductionAmount, $loanBalance);
+    
+                        if ($amountToRecoverFromCurrentLoan > 0) {
+                            $loanEntries = [
+                                'employee_loan_id' => $empLoan->id,
+                                'voucher_id' => $validated['voucher_id'],
+                                'payment_type' => 'recovered',
+                                'amount' => $amountToRecoverFromCurrentLoan,
+                            ];
+    
+                            EmployeeLoanEntry::create($loanEntries);
+    
+                            // Reduce the remaining deduction amount
+                            $remainingDeductionAmount -= $amountToRecoverFromCurrentLoan;
+    
+                            // If the current loan is now fully recovered, update its status
+                            if ($amountToRecoverFromCurrentLoan == $loanBalance) {
+                                $loan = EmployeeLoan::where('id', $empLoan->id);
+                                $loan->update(['status' => 'settled']);
+                            }
+                        }
+                    }
+                }
                
             if($validated['advance_deduction']){
 
-                $advance = AdvanceSalary::where('employee_id', $validated['employee_id'])
+                $advances = AdvanceSalary::where('employee_id', $validated['employee_id'])
                 ->where('is_settled', 0)
-                ->firstOrFail();
+                ->get();
 
-                if($advance){
+                foreach($advances as $advance){
+
                     $advanceEntries = [
                         'advance_id' => $advance->id,
                         'voucher_id' => $validated['voucher_id'],
                         'payment_type' => 'recovered',
-                        'amount' => $validated['advance_deduction'],
+                        'amount' => $advance->amount,
                     ];
                     AdvanceSalaryEntry::create($advanceEntries);
 
                     $advance->update(['is_settled' => 1]);
+
                 }
+               
 
             }
                 

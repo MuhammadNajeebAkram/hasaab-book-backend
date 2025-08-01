@@ -11,52 +11,63 @@ class EmployeeLoanEntryController extends Controller
 {
     //
     public function getInstallment($employee_id)
-{
-    try {
-        $installment = 0;
-        $balanceAmount = 0;
+    {
+        try {
+            $totalInstallment = 0;
+            $totalBalanceAmount = 0;
 
-        $empLoan = EmployeeLoan::where('employee_id', $employee_id)
-            ->where('status', 'active')
-            ->first();
+            $empLoans = EmployeeLoan::where('employee_id', $employee_id)
+                ->where('status', 'active')
+                ->get();
 
-        if ($empLoan) {
-            $balance = EmployeeLoanEntry::where('employee_loan_id', $empLoan->id)
-                ->selectRaw("
-                    SUM(CASE WHEN payment_type = 'issued' THEN amount ELSE 0 END) AS total_issued,
-                    SUM(CASE WHEN payment_type = 'recovered' THEN amount ELSE 0 END) AS total_recovered
-                ")
-                ->first();
-
-            $totalIssued = $balance->total_issued ?? 0;
-            $totalRecovered = $balance->total_recovered ?? 0;
-
-            $balanceAmount = $totalIssued - $totalRecovered;
-
-            $now = Carbon::now();
-
-            if (
-                $now->year > $empLoan->repayment_start_year ||
-                ($now->year == $empLoan->repayment_start_year && $now->month >= $empLoan->repayment_start_month)
-            ) {
-                $installment = $empLoan->installment_amount;
+            if ($empLoans->isEmpty()) {
+                return [
+                    'success' => 1,
+                    'data' => [
+                        'installment' => 0,
+                        'balance_amount' => 0,
+                    ],
+                ];
             }
-        }
 
-        return [
-            'success' => 1,
-            'data' => [
-                'installment' => $installment,
-                'balance_amount' => $balanceAmount,
-            ],
-        ];
-    } catch (\Exception $e) {
-        return [
-            'success' => -1,
-            'message' => $e->getMessage(),
-            'data' => null,
-        ];
+            foreach ($empLoans as $empLoan) {
+                $balance = EmployeeLoanEntry::where('employee_loan_id', $empLoan->id)
+                    ->selectRaw("
+                        SUM(CASE WHEN payment_type = 'issued' THEN amount ELSE 0 END) AS total_issued,
+                        SUM(CASE WHEN payment_type = 'recovered' THEN amount ELSE 0 END) AS total_recovered
+                    ")
+                    ->first();
+
+                $totalIssued = $balance->total_issued ?? 0;
+                $totalRecovered = $balance->total_recovered ?? 0;
+
+                $totalBalanceAmount += ($totalIssued - $totalRecovered);
+
+                $now = Carbon::now();
+
+                // Check if the current date is within or after the repayment start for THIS loan
+                if (
+                    $now->year > $empLoan->repayment_start_year ||
+                    ($now->year == $empLoan->repayment_start_year && $now->month >= $empLoan->repayment_start_month)
+                ) {
+                    $totalInstallment += $empLoan->installment_amount;
+                }
+            }
+
+            return [
+                'success' => 1,
+                'data' => [
+                    'installment' => $totalInstallment,
+                    'balance_amount' => $totalBalanceAmount,
+                ],
+            ];
+        } catch (\Exception $e) {
+            return [
+                'success' => -1,
+                'message' => $e->getMessage(),
+                'data' => null,
+            ];
+        }
     }
-}
 
 }

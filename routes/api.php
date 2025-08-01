@@ -19,6 +19,7 @@ use App\Http\Controllers\EmployeeLoanEntryController;
 use App\Http\Controllers\InstituteController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ProvinceController;
+use App\Http\Controllers\Reports\EmployeeReportController;
 use App\Http\Controllers\Reports\FinancialReportController;
 use App\Http\Controllers\RoyaltyPaymentController;
 use App\Http\Controllers\SalaryController;
@@ -121,6 +122,8 @@ Route::middleware(['auth:api'])->group(function () {
     //Reports
     Route::get('get_ledger/{accountId}', [FinancialReportController::class, 'getLedgerReport']);
     Route::get('get_daily_report/{accountId}', [FinancialReportController::class, 'getDailyReport']);
+
+    Route::get('get_salary_paid_by_month/{month}', [EmployeeReportController::class, 'getSalaryPaidByMonth']);
 
 
 
