@@ -105,7 +105,8 @@ class EmployeeController extends Controller
 
     public function getEmployees(){
         try{
-            $employees = Employee::get();
+            $employees = Employee::orderBy('name', 'asc')
+            ->get();
 
             return response()->json([
                 'success' => 1,
@@ -127,6 +128,7 @@ class EmployeeController extends Controller
         try{
             $employees = Employee::
             with('branch:id,salary_account,salary_advance_account,employee_loan_account,overtime_account,other_allowance_account,bonus_account')
+            ->orderBy('name', 'asc')
             ->get()
             ->map(function ($entry) {
                 return [

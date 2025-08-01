@@ -17,13 +17,17 @@ class EmployeeReportController extends Controller
             ->where('status', 'paid')
             ->where('month', $month)
             ->where('year', $year)
-            ->get(); // <-- Get the results
+            // Use a join to be able to order by the employee name
+            ->join('employees', 'salaries.employee_id', '=', 'employees.id')
+            ->select('salaries.*') // Select all columns from the salaries table
+            ->orderBy('employees.name') // Order by the name column in the joined table
+            ->get();
 
         // Now, you can transform the data for a cleaner response
         $transformedData = $salaryInfo->map(function ($salary) {
             return [
                 'Salary' => $salary->basic_salary,
-                'Overtime' => $salary->overTime,
+                'Overtime' => $salary->overtime,
                 'OtherAllowance' => $salary->other_allowance,
                 'AdvanceDeduction' => $salary->advance_deduction,
                 'LoanDeduction' => $salary->loan_deduction,
