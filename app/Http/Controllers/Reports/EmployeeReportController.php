@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Reports;
 use App\Http\Controllers\Controller;
 use App\Models\Salary;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeReportController extends Controller
 {
@@ -40,6 +41,31 @@ class EmployeeReportController extends Controller
             'success' => true,
             'data' => $transformedData
         ], 200);
+
+        }
+        catch (\Illuminate\Database\QueryException $e) {
+            // Catch database-specific errors (e.g., the SIGNAL you have in the procedure)
+            return response()->json([
+                'success' => false,
+                'message' => 'Database error: ' . $e->getMessage()
+            ], 500);
+        } catch (\Exception $e) {
+            // Catch other general errors
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getEmployeesLoanLedgerSummary(){
+        try{
+            $ledger = DB::table('GetEmployeesLoanLedgerSummaryReport')->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $ledger,
+            ], 200);
 
         }
         catch (\Illuminate\Database\QueryException $e) {

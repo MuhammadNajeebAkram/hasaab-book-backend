@@ -58,7 +58,7 @@ class SalaryController extends Controller
                         'success' => 0,
                         'message' => 'Salary voucher already has been created',
                         
-                    ]);
+                    ], 409);
                 }
 
                 $entries = [

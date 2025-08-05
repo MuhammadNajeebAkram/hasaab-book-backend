@@ -124,6 +124,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('get_daily_report/{accountId}', [FinancialReportController::class, 'getDailyReport']);
 
     Route::get('get_salary_paid_by_month/{month}', [EmployeeReportController::class, 'getSalaryPaidByMonth']);
+    Route::get('get_employees_loan_ledger_summary', [EmployeeReportController::class, 'getEmployeesLoanLedgerSummary']);
 
 
 
