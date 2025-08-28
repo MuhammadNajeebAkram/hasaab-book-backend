@@ -16,16 +16,19 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeDesignationController;
 use App\Http\Controllers\EmployeeLoanController;
 use App\Http\Controllers\EmployeeLoanEntryController;
+use App\Http\Controllers\FinancialYearController;
 use App\Http\Controllers\InstituteController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\Reports\EmployeeReportController;
 use App\Http\Controllers\Reports\FinancialReportController;
+use App\Http\Controllers\Royalty\RoyaltyPaymentScheduleController;
 use App\Http\Controllers\RoyaltyPaymentController;
 use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\VoucherController;
 use App\Models\AdvanceSalaryEntry;
+use App\Models\RoyaltyPaymentSchedule;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
@@ -117,6 +120,13 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('save_royalty_payment', [RoyaltyPaymentController::class, 'saveRoyaltyPayment']);
     Route::post('update_royalty_payment', [RoyaltyPaymentController::class, 'updateRoyaltyPayment']);
     Route::get('get_royalty_payment/{id}', [RoyaltyPaymentController::class, 'getRoyaltyPaymentByVoucher']);
+    
+    Route::post('save_royalty_payment_schedule', [RoyaltyPaymentScheduleController::class, 'saveSchedule']);
+    Route::post('update_royalty_payment_schedule', [RoyaltyPaymentScheduleController::class, 'updateData']);
+    Route::get('get_royalty_schedules', [RoyaltyPaymentScheduleController::class, 'getRoyaltySchedules']);
+    Route::get('get_royalty_schedule/{id}', [RoyaltyPaymentScheduleController::class, 'getScheduleWithDetail']);
+
+    Route::get('get_financial_years', [FinancialYearController::class, 'getFinancialYears']);
 
 
     //Reports
@@ -125,6 +135,7 @@ Route::middleware(['auth:api'])->group(function () {
 
     Route::get('get_salary_paid_by_month/{month}', [EmployeeReportController::class, 'getSalaryPaidByMonth']);
     Route::get('get_employees_loan_ledger_summary', [EmployeeReportController::class, 'getEmployeesLoanLedgerSummary']);
+    Route::get('get_employees_advance_ledger_summary/{month}', [EmployeeReportController::class, 'getEmployeesAdvanceLedgerSummary']);
 
 
 

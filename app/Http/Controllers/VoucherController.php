@@ -15,15 +15,17 @@ class VoucherController extends Controller
 {
     //
 
-    public function getPostableVouchers($type){
+    public function getPostableVouchers(Request $request, $type){
         try{
+
+            $accountId = $request->input('account') ?? 0;
 
             
            /* $vouchers = Voucher::where('is_posted', 0)
             ->where('type', $type)
             ->get();*/
 
-            $vouchers = DB::select("CALL getPostableVouchers(?)", [$type]);
+            $vouchers = DB::select("CALL getPostableVouchers(?, ?)", [$type, $accountId]);
            
            /* if ($vouchers->isEmpty()) {
                 return response()->json([
