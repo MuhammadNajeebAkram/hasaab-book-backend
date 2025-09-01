@@ -136,6 +136,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('get_salary_paid_by_month/{month}', [EmployeeReportController::class, 'getSalaryPaidByMonth']);
     Route::get('get_employees_loan_ledger_summary', [EmployeeReportController::class, 'getEmployeesLoanLedgerSummary']);
     Route::get('get_employees_advance_ledger_summary/{month}', [EmployeeReportController::class, 'getEmployeesAdvanceLedgerSummary']);
+    Route::get('get_employees_bonus_ledger_summary/{year}', [EmployeeReportController::class, 'getEmployeesBonusLedgerSummary']);
 
 
 

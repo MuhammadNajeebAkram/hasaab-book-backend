@@ -150,8 +150,21 @@ public function updateDraftVoucher(Request $request)
             'entries.*.description' => 'nullable|string',
             
         ]);
+
+        $voucher = Voucher::findOrFail($validated['id']);
+
+        // Check if the voucher is already posted
+        if ($voucher->is_posted) {
+            DB::rollBack();
+            return response()->json([
+                'success' => -1,
+                'message' => 'Voucher is already posted and cannot be updated.',
+            ], 403); // Use a 403 Forbidden status code
+        }
+
         $user = Auth::guard('api')->user();
         if($request -> is_posted){
+            
             $validated['is_posted'] = 1;
             $validated['posted_by'] = $user->id;
             $validated['posted_at'] = Carbon::now();           
