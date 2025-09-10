@@ -62,7 +62,7 @@ class SalaryController extends Controller
                 }
 
                 $entries = [
-                    ['account_id' => $validated['payment_account'], 'amount' => $validated['net_salary'], 'description' => 'Payment Account', 'type' => 'credit'],
+                    ['account_id' => $validated['payment_account'], 'amount' => $validated['net_salary'], 'description' => $validated['description'], 'type' => 'credit'],
                     ['account_id' => $validated['account_id'], 'amount' => $validated['basic_salary'], 'description' => $validated['description'], 'type' => 'debit'],
                 ];
 
@@ -154,7 +154,7 @@ class SalaryController extends Controller
             ]);
 
             $entries = [
-                ['account_id' => $validated['payment_account'], 'amount' => $validated['net_salary'], 'description' => 'Payment Account', 'type' => 'credit'],
+                ['account_id' => $validated['payment_account'], 'amount' => $validated['net_salary'], 'description' => $validated['description'], 'type' => 'credit'],
                 ['account_id' => $validated['account_id'], 'amount' => $validated['basic_salary'], 'description' => $validated['description'], 'type' => 'debit'],
             ];
 
