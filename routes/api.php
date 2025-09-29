@@ -29,6 +29,7 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\VoucherController;
 use App\Models\AdvanceSalaryEntry;
 use App\Models\RoyaltyPaymentSchedule;
+use App\Http\Controllers\Reports\MarketingReportController;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
@@ -137,6 +138,8 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('get_employees_loan_ledger_summary', [EmployeeReportController::class, 'getEmployeesLoanLedgerSummary']);
     Route::get('get_employees_advance_ledger_summary/{month}', [EmployeeReportController::class, 'getEmployeesAdvanceLedgerSummary']);
     Route::get('get_employees_bonus_ledger_summary/{year}', [EmployeeReportController::class, 'getEmployeesBonusLedgerSummary']);
+
+    Route::get('get_marketing_report/{is_summary}', [MarketingReportController::class, 'getMarketingReport']);
 
 
 

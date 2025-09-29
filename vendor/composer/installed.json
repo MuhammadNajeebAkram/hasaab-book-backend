@@ -1500,6 +1500,65 @@
             "install-path": "../laravel/framework"
         },
         {
+            "name": "laravel/installer",
+            "version": "v5.18.0",
+            "version_normalized": "5.18.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/installer.git",
+                "reference": "68fe096fcdb351d7245dc3afef7cc2f09b2cb5ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/installer/zipball/68fe096fcdb351d7245dc3afef7cc2f09b2cb5ef",
+                "reference": "68fe096fcdb351d7245dc3afef7cc2f09b2cb5ef",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/filesystem": "^10.20|^11.0|^12.0",
+                "illuminate/support": "^10.20|^11.0|^12.0",
+                "laravel/prompts": "^0.1.18|^0.2.0|^0.3.0",
+                "php": "^8.2",
+                "symfony/console": "^6.2|^7.0",
+                "symfony/polyfill-mbstring": "^1.31",
+                "symfony/process": "^6.2|^7.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2.1",
+                "phpunit/phpunit": "^10.4"
+            },
+            "time": "2025-09-23T14:20:43+00:00",
+            "bin": [
+                "bin/laravel"
+            ],
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Installer\\Console\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "Laravel application installer.",
+            "keywords": [
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel/installer/issues",
+                "source": "https://github.com/laravel/installer/tree/v5.18.0"
+            },
+            "install-path": "../laravel/installer"
+        },
+        {
             "name": "laravel/pail",
             "version": "v1.2.2",
             "version_normalized": "1.2.2.0",
